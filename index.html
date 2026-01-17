@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flexbox Froggy - A game for learning CSS flexbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans|Fredoka+One|Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+      #team-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9); z-index: 9999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: white; font-family: 'PT Sans', sans-serif;
+      }
+      #login-section input { padding: 10px; font-size: 16px; border-radius: 5px; border: none; }
+      #login-section button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #27ae60; color: white; border: none; border-radius: 5px; margin-left: 5px; }
+      
+      #game-timer {
+        font-family: 'Source Code Pro', monospace;
+        font-size: 24px;
+        color: #2c3e50;
+        margin-right: 20px;
+        font-weight: bold;
+        display: none; 
+      }
+
+      /* New Give Up Button */
+      #stop-btn {
+        background: #e74c3c; color: white; border: none; padding: 5px 15px; 
+        border-radius: 4px; cursor: pointer; font-family: 'PT Sans', sans-serif;
+        display: none; margin-right: 15px;
+      }
+      #stop-btn:hover { background: #c0392b; }
+
+      .settings-wrapper { margin-top: 20px; margin-bottom: 20px; font-size: 0.8em; opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    
+    <div id="team-overlay">
+      <div id="login-section" style="text-align:center;">
+        <h1 class="title" style="color:white;">Flexbox Competition</h1>
+        <p id="status-message">Enter your Team Name to start:</p>
+        <div id="login-inputs">
+            <input type="text" id="team-name-input" placeholder="Team Name">
+            <button id="start-btn">Start Game</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="admin.html" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.9em;">Admin Login</a>
+        </div>
+      </div>
+    </div>
+
+    <section id="sidebar">
+      <div class="header">
+        <div>
+          <h1 class="title">Flexbox Froggy</h1>
+        </div>
+        
+        <div style="display:flex; align-items:center;">
+            <button id="stop-btn">Give Up</button>
+            <div id="game-timer">15:00</div>
+        </div>
+        
+        <div id="level-counter">
+          <span class="arrow left">
+            <span class="triangle"></span>
+          </span>
+          <span id="level-indicator">
+            <span id="labelLevel" class="translate">Level</span>
+            <span class="current">1</span>
+            <span id="labelOf" class="translate">of</span>
+            <span class="total">1</span>
+            <span class="caret">▾</span>
+          </span>
+          <span class="arrow right">
+            <span class="triangle"></span>
+          </span>
+          <div id="levelsWrapper" class="tooltip">
+            <div id="levels"></div>
+            <div id="labelReset" class="translate">Reset</div>
+          </div>
+        </div>
+      </div>
+      <p id="instructions"></p>
+      <div id="editor">
+        <div id="css">
+          <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+          <pre id="before"></pre>
+          <textarea id="code" autofocus autocapitalize="none" spellcheck="false"></textarea>
+          <pre id="after"></pre>
+        </div>
+        <button id="next" class="translate">Next</button>
+      </div>
+      
+      <div class="settings-wrapper">
+        <span id="settings">
+          <span id="labelSettings" class="toggle translate">Settings</span>
+          <span class="tooltip">
+            <section>
+              <h4 id="labelDifficulty" class="translate">Difficulty</h4>
+              <form id="difficulty">
+                <div>
+                  <input type="radio" name="difficulty" id="difficultyEasy" value="easy" checked>
+                  <label id="labelDifficultyEasy" for="difficultyEasy" class="translate">Beginner</label>
+                </div>
+                <div>
+                  <input type="radio" name="difficulty" id="difficultyMedium" value="medium">
+                  <label id="labelDifficultyMedium" for="difficultyMedium" class="translate">Intermediate - No Directions</label>
+                </div>
+                <div>
+                  <input type="radio" name="difficulty" id="difficultyHard" value="hard">
+                  <label id="labelDifficultyHard" for="difficultyHard" class="translate">Expert - No Directions &amp; Random Levels</label>
+                </div>
+              </form>
+            </section>
+            <section>
+              <h4 id="labelColorblind" class="translate">Colorblind Mode</h4>
+              <form id="colorblind">
+                <div>
+                  <div>
+                    <input type="radio" name="colorblind" id="colorblindOff" value="false" checked>
+                    <label id="labelColorblindOff" for="colorblindOff" class="translate">Off</label>
+                  </div>
+                  <div>
+                    <input type="radio" name="colorblind" id="colorblindOn" value="true">
+                    <label id="labelColorblindOn" for="colorblindOn" class="translate">On</label>
+                  </div>
+              </form>
+            </section>
+          </span>
+        </span>
+      </div>
+
+    </section>
+    <section id="view">
+      <div id="board">
+        <div id="pond">
+        </div>
+        <div id="background">
+        </div>
+      </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/docs.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/game.js"></script>
+    <script type="module" src="js/firebase-logic.js"></script>
+  </body>
+</html>
